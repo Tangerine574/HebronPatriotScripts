@@ -1,1 +1,147 @@
+@echo off
+cls
+color 1f
+Title User Manager
+
+:Menu
+cls
+echo ----------------
+echo Account Options
+echo ----------------
+echo.
+echo 1 - View Account Details
+echo.
+echo 2 - Change Account Password
+echo.
+echo 3 - Change Account Name
+echo.
+echo 4 - Enable/Disable Account
+echo.
+echo 5 - Add/Remove Administrator Priviledge
+echo.
+echo 6 - Add/Remove Account
+echo.
+echo 7 - Exit
+echo.
+echo NOTE: You must be an administrator to use some features of this program
+echo.
+echo Made By Pranav Bolla
+echo.
+set /p M= Type the number that corresponds with the task you wish to perform, and hit ENTER:
+
+IF %M%== 1 GOTO Details
+IF %M%== 2 GOTO Password
+IF %M%== 3 GOTO Name
+IF %M%== 4 GOTO Enable/Disable
+IF %M%== 5 GOTO Account Type
+IF %M%== 6 GOTO Add/Remove
+IF %M%== 7 GOTO Exit
+
+:Details
+cls
+wmic useraccount get name
+echo.
+set /p User= "Type the user account you wish to see the details of:"
+net user %User%  
+echo The user account information has been shows successfully
+echo.
+pause
+echo.
+set /p Quit= "Would you like to go back to menu? y-Yes n-no:"
+if %Quit% == y goto Menu
+if %Quit% == n goto Details
+goto Menu
+
+:Password
+cls
+wmic useraccount get name
+echo.
+echo NOTE: If the user account has a space, you MUST type it in quotes
+echo.
+set /p User= "Type the user account you wish to change the password of:"
+echo.
+net user %User% *
+echo The user account has been changed sucessfully
+echo.
+pause
+echo.
+set /p Quit= "Would you like to go back to menu? y-Yes n-no:"
+if %Quit% == y goto Menu
+if %Quit% == n goto Password
+goto Menu
+
+:Name
+cls
+wmic useraccount get name
+echo.
+set /p CurrentName= "Type the user account you wish to change the name of:"
+echo.
+set /p NewName= "Type the new name of the user account:"
+wmic useraccount where name='%CurrentName%' rename %NewName%
+echo.
+echo The user accont name has been changed successfully
+echo.
+pause
+echo.
+set /p Quit= "Would you like to go back to menu? y-Yes n-no:"
+if %Quit% == y goto Menu
+if %Quit% == n goto Name
+goto Menu
+
+
+
+:Enable/Disable
+cls
+wmic useraccount get name
+echo.
+set /p Status= "E-Enable or D-Disable:"
+echo.
+set /p User= "Type the user whose account you want to enable or disable:"
+if %Status% == E net user %User% /active:yes
+if %Status% == D net user %User% /active:no
+echo.
+echo The user account has been changed sucessfully
+echo.
+pause
+echo.
+set /p Quit= "Would you like to go back to menu? y-Yes n-no:"
+if %Quit% == y goto Menu
+if %Quit% == n goto Enable/Disable
+goto Menu
+
+:Account Type
+cls
+wmic useraccount get name
+echo.
+set /p Status= "A-Add or R-Remove from Administraor Group:"
+set /p User= "Type the user whose account you want to add or remove from administrators:"
+if %Status% == A net localgroup administrators %User% /add
+if %Status% == R net localgroup administrators %User% /del
+echo The group has been changed sucessfully
+echo.
+pause
+echo.
+set /p Quit= "Would you like to go back to menu? y-Yes n-no:"
+if %Quit% == y goto Menu
+if %Quit% == n goto Account Type
+goto Menu
+
+:Add/Remove
+cls
+wmic useraccount get name
+echo.
+set /p Status= "A-Add or R-Remove From System:"
+set /p User= "Type the user whose account you want to add or remove from the system:"
+if %Status% == A net user %User% /add /fullname:%User%
+if %Status% == R net user %User% /del
+echo.
+pause
+echo.
+set /p Quit= "Would you like to go back to menu? y-Yes n-no:"
+if %Quit% == y goto Menu
+if %Quit% == n goto Add/Remove
+goto Menu
+
+:Exit
+exit
 
